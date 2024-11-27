@@ -95,7 +95,13 @@ pnpm add  mockjs
 
 部署项目到GitHub有两种方式：GitHub Pages和GitHub Actions。
 
-GitHub Pages是直接将打包好的静态资源上传到GitHub Pages对应分支，然后通过GitHub Pages提供的地址浏览网站。而GitHub Actions可以通过自定义工作流，配置作业实现从源码自动打包成静态资源，再将静态资源发布到GitHub Pages指定的分支上的全过程，实现自动化部署。
+GitHub Pages是直接将打包好的静态资源上传到GitHub Pages对应分支，然后通过GitHub Pages提供的地址浏览网站。
+而GitHub Actions可以通过自定义工作流，配置作业实现从源码自动打包成静态资源，再将静态资源发布到GitHub 
+Pages指定的分支上的全过程，实现自动化部署。
+
+> GitHub部署只能部署静态资源，对于服务器端的配置无能为力，所以项目不能使用History路由模式，
+>如果使用History路由模式，当用户刷新页面时将会访问GitHub的404页面。
+>因此，如果一定要使用History路由模式
 
 - GitHub Pages方式
 
