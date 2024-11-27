@@ -1,0 +1,133 @@
+<template>
+    <div class="header-cont">
+        <div class="left">
+            <h1><RouterLink to="/">{{  t('sitename') }}</RouterLink></h1>
+        </div>
+        <div class="right flex-center">
+            <div class="lang gap">
+                <span class="item"
+                    :class="{active:locale==='zh-cn'}"
+                    @click="changeLanguage('zh-cn')">简体中文</span>
+                /
+                <span class="item"
+                    :class="{active:locale==='en'}"
+                    @click="changeLanguage('en')">EN</span>
+            </div>
+            <template v-if="isLogin">
+                <div class="gap cursor">
+                    <RouterLink to="/personal/message">
+                        <el-badge :is-dot="unreadCount>0">
+                            <el-icon><message/></el-icon>
+                        </el-badge>
+                        
+                    </RouterLink>
+                </div>
+                <!-- 下拉菜单的单击事件使用该组件的command属性 -->
+                <el-dropdown trigger="click" @command="handleCommand">
+                    <div class="flex-center cursor">
+                        {{ username }}
+                        <el-icon><caret-bottom/></el-icon>
+                    </div>
+                    <template #dropdown>
+                        <!-- 在el-dropdown-menu组件的子组件el-dropdown-item上设置command指令，这些指令将传入对应el-dropdown组件的command事件回调中 -->
+                        <el-dropdown-menu>
+                            <el-dropdown-item command="toPersonal">{{ t('personalCenter') }}</el-dropdown-item>
+                            <el-dropdown-item divided command="toLogout">{{  t('logout') }}</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </template>
+            <template v-else-if="$route.name !== 'Login'">
+                <RouterLink to="/login">{{ t('login') }}</RouterLink>"
+            </template>
+
+        </div>
+    </div>
+</template>
+
+
+<script setup>
+import { logout } from '@/apis/login'
+
+const { locale, t } = useI18n()
+
+const router = useRouter()
+const store = useStore()
+
+// 切换语言
+function changeLanguage(lang) {
+    locale.value = lang
+    // 保证下一次访问浏览器时保持与上一次离开前的语言一致
+    localStorage.setItem('locale', lang)
+}
+
+// 登陆信息
+const isLogin = computed(() => store.getters['user/isLogin']);
+const userInfo = computed(() => store.state.user.userInfo);
+const username = computed(() => userInfo.value?.name);
+// 未读消息
+const unreadCount = computed(() => userInfo.value?.unReadCount);
+// 为保证页面刷新时能同步登录用户的信息变化，在PageHeader.vue初始化时需要主动刷新一次用户信息
+store.dispatch('user/refreshUserInfo')
+
+
+
+
+const comments = ({
+    toPersonal: ()=> {
+        router.push('/personal')
+    },
+    toLogout: ()=> {
+        logout().then(res=>{
+            if(res.code === 200){
+                store.commit('user/clearToken')
+                store.commit('user/clearUserInfo')
+                router.push('/login')
+            }
+        })
+    }
+})
+
+const handleCommand = (command) => {
+    comments[command] && comments[command]()
+}
+</script>
+
+<style scoped lang="scss">
+.header-cont {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 100%;
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+    h1 {
+        margin: 0;
+        font-size: 20px;
+    }
+    .gap {
+        margin-right: 20px;
+    }
+    .right {
+        display: flex;
+        // 使 right 容器内的子元素在垂直方向上居中对齐
+        align-items: center; 
+        .lang {
+            font-size: 14px;
+            .item {
+                cursor: pointer;
+                &.active {
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+    .el-dropdown {
+        color: inherit;
+    }
+}
+</style>
