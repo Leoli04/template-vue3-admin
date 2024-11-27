@@ -14,7 +14,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import PageHeader from './components/PageHeader.vue';
 import PageSidebar from './components/PageSidebar.vue';
 

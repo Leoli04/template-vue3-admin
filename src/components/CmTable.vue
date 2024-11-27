@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script setup lang=ts>
+<script setup>
 import { reactive } from "vue";
 
 const { t } = useI18n();

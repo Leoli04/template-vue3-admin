@@ -87,8 +87,8 @@ const route404 = {
 
 // 创建路由实例，把定义的路由挂载到路由实例中
 const router = createRouter({
-  // history: createWebHashHistory(process.env.BASE_URL),
-  history: createWebHashHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
+  // history: createWebHashHistory(),
   routes,
 });
 

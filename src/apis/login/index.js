@@ -1,7 +1,7 @@
 import request from "@/axios"
 
 // 登陆接口
-export const login = (data: any) => {
+export const login = (data) => {
   return request({
     url: 'login',
     method: 'post',

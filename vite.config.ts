@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.NODE_ENV === "production" ? "/template-vue3-admin/" : "/",
   plugins: [
     vue(),  //用于支持 Vue 3 项目的编译和构建
     AutoImport({
