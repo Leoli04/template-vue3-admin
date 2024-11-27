@@ -125,7 +125,9 @@ git push -f https://github.com/xx/template-vue3-admin.git master:gh-pages
 
 - GitHub Actions方式
 
-1. 创建.github/workflows/deploy.yml文件，内容如下：
+1. 在仓库中创建一个 .github/workflows 目录：
+
+2. 创建一个 YAML 文件，例如 main.yml，并添加以下内容
 
 ```yml
 
