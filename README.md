@@ -7,6 +7,7 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 
 ## vue3管理后台项目
 
+系统主要功能模块分为三大类：应用管理(app)、系统管理(sys)和审计管理(logs)。其中应用管理模块包含用户管理(User)、机构管理(Dept)、角色管理(Role)和资源管理(Resource)4个子功能模块；系统管理包含用户管理(User)、公告管理(Notice)两个子功能模块；审计日志包含操作日志(Operation)和访问日志(Visit)两个子功能模块
 
 ## 项目步骤
 
@@ -76,16 +77,15 @@ pnpm add  mockjs
 
 ```
 
-> import { resolve } from 'path'提示： 找不到模块“path”或其相应的类型声明
+### 开发中遇到的问题
+
+> 1. import { resolve } from 'path'提示： 找不到模块“path”或其相应的类型声明
 > 报错原因是 TypeScript 无法找到 path 模块的类型声明文件。path 是 Node.js 的内置模块，但在某些环境中，TypeScript 无法自动识别这些模块
 > 解决办法：`pnpm add -D @types/node` // -D 或 --save-dev：将包安装为开发依赖
 > 安装完成后，vite.config.ts 文件无需修改，因为 @types/node 会自动为 path 模块提供类型声明。
 
-> pnpm安装新的依赖 时 pnpm add axios 与pnpm i axios区别
+> 2. pnpm安装新的依赖 时 pnpm add axios 与pnpm i axios区别
 > 都是安装新的依赖包，pnpm add会更新package.json 文件，pnpm i 不会。
 
-
-系统主要功能模块分为三大类：应用管理(app)、系统管理(sys)和审计管理(logs)。其中应用管理模块包含用户管理(User)、机构管理(Dept)、角色管理(Role)和资源管理(Resource)4个子功能模块；系统管理包含用户管理(User)、公告管理(Notice)两个子功能模块；审计日志包含操作日志(Operation)和访问日志(Visit)两个子功能模块
-
- * 使用 export function userInfo(data) 导出函数，这样可以在其他文件中使用 { userInfo } 的方式导入。
-  如果使用 export default 导出，则需要在导入时使用默认导入方式，例如 import userInfo from '@/apis/personal'
+> 3.使用 export function userInfo(data) 导出函数，这样可以在其他文件中使用 { userInfo } 的方式导入。
+>  如果使用 export default 导出，则需要在导入时使用默认导入方式，例如 import userInfo from '@/apis/personal'
