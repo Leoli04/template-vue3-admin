@@ -89,3 +89,80 @@ pnpm add  mockjs
 
 > 3.使用 export function userInfo(data) 导出函数，这样可以在其他文件中使用 { userInfo } 的方式导入。
 >  如果使用 export default 导出，则需要在导入时使用默认导入方式，例如 import userInfo from '@/apis/personal'
+
+
+### 部署git pages
+
+部署项目到GitHub有两种方式：GitHub Pages和GitHub Actions。
+
+GitHub Pages是直接将打包好的静态资源上传到GitHub Pages对应分支，然后通过GitHub Pages提供的地址浏览网站。而GitHub Actions可以通过自定义工作流，配置作业实现从源码自动打包成静态资源，再将静态资源发布到GitHub Pages指定的分支上的全过程，实现自动化部署。
+
+- GitHub Pages方式
+
+
+手动处理：构建好后的dist文件夹内容推到 gh-pages 分支
+
+```
+# 进入打包目录
+cd dist
+git init
+git add -A
+git commit -m 'deploy'
+# 强制推送本地 master 分支到远程 gh-pages 分支
+git push -f https://github.com/xx/template-vue3-admin.git master:gh-pages
+```
+使用插件：
+1. 安装gh-pages插件：`pnpm i gh-pages -D`
+
+2. 在 package.json 中添加部署脚本
+
+```
+"scripts": {
+  "deploy": "gh-pages -d dist"
+}
+```
+3. 执行部署命令：`npm run deploy`
+
+- GitHub Actions方式
+
+1. 创建.github/workflows/deploy.yml文件，内容如下：
+
+```yml
+
+# 工作流的名称
+name: vue3 admin Deploy
+# 工作流触发条件，这里是git push命令发生时
+on: [push]
+# 工作流运行的作业配置
+jobs:
+  # 作业名称
+  build-and-deploy:
+    # 运行在最新的ubuntu系统中
+    runs-on: ubuntu-latest
+    # 作业步骤
+    steps:
+      # 步骤1，checkout代码
+      - name: Checkout
+        # 使用checkout插件
+        uses: actions/checkout@v3
+        
+      # 步骤2，安装和打包
+      - name: Install and Build
+        # 运行的命令，这里包含两条，npm i 和npm run build
+        run: |
+          npm i
+          npm run build
+          
+      # 步骤3，部署静态资源
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          # 部署到的分支，这里是GitHub Pages默认分支gh-pages.
+          branch: gh-pages
+          # 要发布的文件夹，这里配置为打包的目标文件夹dist.
+          folder: dist
+          # 配置个人令牌，设置为本仓库添加到Secrets的DEPLOY_KEY
+          token: ${{ secrets.deploy_key }}
+
+```
+
