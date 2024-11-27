@@ -111,7 +111,9 @@ git commit -m 'deploy'
 # 强制推送本地 master 分支到远程 gh-pages 分支
 git push -f https://github.com/xx/template-vue3-admin.git master:gh-pages
 ```
-使用插件：
+在仓库设置中，将 GitHub Pages 的源分支设置为 gh-pages 分支
+
+** 使用插件 **：
 1. 安装gh-pages插件：`pnpm i gh-pages -D`
 
 2. 在 package.json 中添加部署脚本
