@@ -96,6 +96,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const isLogin = store.getters["user/isLogin"]
 
+  // 跳转页面是登陆页面，如果已经登陆，跳到home页面
   if(to.path === '/login'){
     if(isLogin){
       return {name:"Home"}
@@ -103,6 +104,7 @@ router.beforeEach(async (to) => {
     return true
   }
 
+  // 跳到非登陆页面，如果没有登陆，跳到登陆页面
   if(to.meta.requireAuth){
     if(!isLogin){
       return {name:"Login"}
@@ -110,6 +112,7 @@ router.beforeEach(async (to) => {
 
   }
 
+  // 根据接口添加动态路由
   await addDynamic();
    if(!to.name && hasRoute(to)){
       return {...to}
@@ -130,6 +133,7 @@ router.beforeEach(async (to) => {
 });
 
 
+// 
 function hasRoute(to){
   const item = router.getRoutes().find(item=>item.path === to.path);
   return !!item;
